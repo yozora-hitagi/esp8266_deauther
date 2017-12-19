@@ -15,7 +15,7 @@
 
 // Settings //
 
-//#define USE_DISPLAY /* <-- uncomment that if you want to use the display */
+#define USE_DISPLAY /* <-- uncomment that if you want to use the display */
 #define resetPin 4 /* <-- comment out or change if you need GPIO 4 for other purposes */
 #define USE_LED16 /* <-- for the Pocket ESP8266 which has a LED on GPIO 16 to indicate if it's running */
 
@@ -586,7 +586,7 @@ void setup() {
   display.drawString(104, 24, "1.6");
   display.setFont(ArialMT_Plain_10);
   display.drawString(0, 40, "Copyright (c) 2017");
-  display.drawString(0, 50, "Stefan Kremser");
+  display.drawString(0, 50, "yozra-hitagi");
   display.display();
 
   display.setFont(Roboto_Mono_8);
