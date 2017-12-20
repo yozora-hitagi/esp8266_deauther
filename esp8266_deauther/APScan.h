@@ -12,6 +12,7 @@
 extern String data_getVendor(uint8_t first, uint8_t second, uint8_t third);
 extern ESP8266WebServer server;
 extern void sendBuffer();
+extern void sendContentP(String str);
 extern void sendToBuffer(String str);
 extern void sendHeader(int code, String type, size_t _size);
 extern const bool debug;
@@ -57,3 +58,4 @@ class APScan {
 };
 
 #endif
+

@@ -26,7 +26,7 @@
   
   //include the library you need
   #include "SSD1306.h"
-  #include "SH1106.h"
+  //#include "SH1106.h"
 
   //create display(Adr, SDA-pin, SCL-pin)
   SSD1306 display(0x3c, 5, 4); //GPIO 5 = D1, GPIO 4 = D2
@@ -146,53 +146,53 @@ void stopWifi() {
 
 void loadIndexHTML() {
   if(warning){
-    sendFile(200, "text/html", data_indexHTML, sizeof(data_indexHTML));
+    sendFile(200, "text/html", data_index_html, sizeof(data_index_html));
   }else{
-    sendFile(200, "text/html", data_apscanHTML, sizeof(data_apscanHTML));
+    sendFile(200, "text/html", data_apscan_html, sizeof(data_apscan_html));
   }
 }
 void loadAPScanHTML() {
   warning = false;
-  sendFile(200, "text/html", data_apscanHTML, sizeof(data_apscanHTML));
+  sendFile(200, "text/html", data_apscan_html, sizeof(data_apscan_html));
 }
 void loadStationsHTML() {
-  sendFile(200, "text/html", data_stationsHTML, sizeof(data_stationsHTML));
+  sendFile(200, "text/html", data_stations_html, sizeof(data_stations_html));
 }
 void loadAttackHTML() {
-  sendFile(200, "text/html", data_attackHTML, sizeof(data_attackHTML));
+  sendFile(200, "text/html", data_attack_html, sizeof(data_attack_html));
 }
 void loadSettingsHTML() {
-  sendFile(200, "text/html", data_settingsHTML, sizeof(data_settingsHTML));
+  sendFile(200, "text/html", data_settings_html, sizeof(data_settings_html));
 }
 void load404() {
-  sendFile(200, "text/html", data_errorHTML, sizeof(data_errorHTML));
+  sendFile(200, "text/html", data_error_html, sizeof(data_error_html));
 }
-void loadInfoHTML(){
-  sendFile(200, "text/html", data_infoHTML, sizeof(data_infoHTML));
-}
-void loadLicense(){
-  sendFile(200, "text/plain", data_license, sizeof(data_license));
-}
+//void loadInfoHTML(){
+//  sendFile(200, "text/html", data_infoHTML, sizeof(data_infoHTML));
+//}
+//void loadLicense(){
+//  sendFile(200, "text/plain", data_license, sizeof(data_license));
+//}
 
 void loadFunctionsJS() {
-  sendFile(200, "text/javascript", data_js_functionsJS, sizeof(data_js_functionsJS));
+  sendFile(200, "text/javascript", data_functions_js, sizeof(data_functions_js));
 }
 void loadAPScanJS() {
-  sendFile(200, "text/javascript", data_js_apscanJS, sizeof(data_js_apscanJS));
+  sendFile(200, "text/javascript", data_apscan_js, sizeof(data_apscan_js));
 }
 void loadStationsJS() {
-  sendFile(200, "text/javascript", data_js_stationsJS, sizeof(data_js_stationsJS));
+  sendFile(200, "text/javascript", data_stations_js, sizeof(data_stations_js));
 }
 void loadAttackJS() {
   attack.ssidChange = true;
-  sendFile(200, "text/javascript", data_js_attackJS, sizeof(data_js_attackJS));
+  sendFile(200, "text/javascript", data_attack_js, sizeof(data_attack_js));
 }
 void loadSettingsJS() {
-  sendFile(200, "text/javascript", data_js_settingsJS, sizeof(data_js_settingsJS));
+  sendFile(200, "text/javascript", data_settings_js, sizeof(data_settings_js));
 }
 
 void loadStyle() {
-  sendFile(200, "text/css;charset=UTF-8", data_styleCSS, sizeof(data_styleCSS));
+  sendFile(200, "text/css;charset=UTF-8", data_style_css, sizeof(data_style_css));
 }
 
 
@@ -522,15 +522,15 @@ void setup() {
   server.on("/stations.html", loadStationsHTML);
   server.on("/attack.html", loadAttackHTML);
   server.on("/settings.html", loadSettingsHTML);
-  server.on("/info.html", loadInfoHTML);
-  server.on("/license", loadLicense);
+//  server.on("/info.html", loadInfoHTML);
+//  server.on("/license", loadLicense);
 
   /* JS */
-  server.on("/js/apscan.js", loadAPScanJS);
-  server.on("/js/stations.js", loadStationsJS);
-  server.on("/js/attack.js", loadAttackJS);
-  server.on("/js/settings.js", loadSettingsJS);
-  server.on("/js/functions.js", loadFunctionsJS);
+  server.on("/apscan.js", loadAPScanJS);
+  server.on("/stations.js", loadStationsJS);
+  server.on("/attack.js", loadAttackJS);
+  server.on("/settings.js", loadSettingsJS);
+  server.on("/functions.js", loadFunctionsJS);
 
   /* CSS */
   server.on ("/style.css", loadStyle);
@@ -708,3 +708,4 @@ void loop() {
 #endif
 
 }
+

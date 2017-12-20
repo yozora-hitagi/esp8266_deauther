@@ -1,7 +1,7 @@
 #ifndef SSIDList_h
 #define SSIDList_h
 
-#include <EEPROM.h>
+
 #include "Mac.h"
 #include "MacList.h"
 
@@ -37,3 +37,4 @@ class SSIDList
 };
 
 #endif
+

@@ -1,4 +1,5 @@
 #include "SSIDList.h"
+#include <EEPROM.h>
 
 SSIDList::SSIDList() {
   if (listAdr + SSIDListLength * SSIDLength > 4096) Serial.println("WARNING: EEPROM overflow!");
@@ -103,6 +104,7 @@ void SSIDList::_random() {
     add(_rName, random(2) > 0.5 );
   }
 }
+
 
 
 

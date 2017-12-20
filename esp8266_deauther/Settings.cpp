@@ -1,49 +1,72 @@
 #include "Settings.h"
 
-Settings::Settings() {
+Settings::Settings()
+{
   uint8_t tempMAC[6];
   defaultMacAP.set(WiFi.softAPmacAddress(tempMAC));
-  if(!defaultMacAP.valid()) defaultMacAP.randomize();
+  if (!defaultMacAP.valid())
+    defaultMacAP.randomize();
 }
 
-void Settings::syncMacInterface(){
-  if(debug) Serial.println("Trying to sync the MAC addr with settings");
-  if(isSettingsLoaded){
+void Settings::syncMacInterface()
+{
+  if (debug)
+    Serial.println("Trying to sync the MAC addr with settings");
+  if (isSettingsLoaded)
+  {
     Mac macToSync;
-    if(isMacAPRand){
+    if (isMacAPRand)
+    {
       macToSync.randomize();
       wifi_set_macaddr(SOFTAP_IF, macToSync._get());
-      if(debug) Serial.println("Synced with a random mac addr : " + macToSync.toString());
-    }else if(macAP.valid()){
+      if (debug)
+        Serial.println("Synced with a random mac addr : " + macToSync.toString());
+    }
+    else if (macAP.valid())
+    {
       macToSync = macAP;
       wifi_set_macaddr(SOFTAP_IF, macToSync._get());
-      if(debug) Serial.println("Synced with saved mac addr : " + macToSync.toString());
-    }else{
-      if(debug) Serial.println("Could not sync because of invalid settings !");
+      if (debug)
+        Serial.println("Synced with saved mac addr : " + macToSync.toString());
     }
-  }else{
-    if(debug) Serial.println("Could not sync because settings are not loaded !");
+    else
+    {
+      if (debug)
+        Serial.println("Could not sync because of invalid settings !");
+    }
+  }
+  else
+  {
+    if (debug)
+      Serial.println("Could not sync because settings are not loaded !");
   }
 }
 
-void Settings::setLedPin(int newLedPin){
+void Settings::setLedPin(int newLedPin)
+{
   prevLedPin = ledPin;
-  if(newLedPin > 0 && newLedPin != prevLedPin){
+  if (newLedPin > 0 && newLedPin != prevLedPin)
+  {
     ledPin = newLedPin;
     pinMode(ledPin, OUTPUT);
-    if(!prevLedPin == 0){
+    if (!prevLedPin == 0)
+    {
       digitalWrite(ledPin, digitalRead(prevLedPin));
       digitalWrite(prevLedPin, pinStateOff);
       pinMode(prevLedPin, INPUT);
-    }else{
+    }
+    else
+    {
       digitalWrite(ledPin, pinStateOff);
     }
   }
 }
 
-void Settings::load() {
+void Settings::load()
+{
 
-  if (EEPROM.read(checkNumAdr) != checkNum) {
+  if (EEPROM.read(checkNumAdr) != checkNum)
+  {
     reset();
     return;
   }
@@ -51,27 +74,35 @@ void Settings::load() {
   ssidLen = EEPROM.read(ssidLenAdr);
   passwordLen = EEPROM.read(passwordLenAdr);
 
-  if (ssidLen < 1 || ssidLen > 32 || passwordLen < 8 && passwordLen != 0  || passwordLen > 32) {
+  if (ssidLen < 1 || ssidLen > 32 || passwordLen < 8 && passwordLen != 0 || passwordLen > 32)
+  {
     reset();
     return;
   }
 
   ssid = "";
   password = "";
-  for (int i = 0; i < ssidLen; i++) ssid += (char)EEPROM.read(ssidAdr + i);
-  for (int i = 0; i < passwordLen; i++) password += (char)EEPROM.read(passwordAdr + i);
+  for (int i = 0; i < ssidLen; i++)
+    ssid += (char)EEPROM.read(ssidAdr + i);
+  for (int i = 0; i < passwordLen; i++)
+    password += (char)EEPROM.read(passwordAdr + i);
 
   ssidHidden = (bool)EEPROM.read(ssidHiddenAdr);
 
-  if ((int)EEPROM.read(apChannelAdr) >= 1 && (int)EEPROM.read(apChannelAdr) <= 14) {
+  if ((int)EEPROM.read(apChannelAdr) >= 1 && (int)EEPROM.read(apChannelAdr) <= 14)
+  {
     apChannel = (int)EEPROM.read(apChannelAdr);
-  } else {
+  }
+  else
+  {
     apChannel = 1;
   }
-  for(int i=0; i<6; i++){
-    macAP.setAt((uint8_t)EEPROM.read(macAPAdr+i),i);
+  for (int i = 0; i < 6; i++)
+  {
+    macAP.setAt((uint8_t)EEPROM.read(macAPAdr + i), i);
   }
-  if(!macAP.valid()) macAP.set(defaultMacAP);
+  if (!macAP.valid())
+    macAP.set(defaultMacAP);
   isMacAPRand = (bool)EEPROM.read(isMacAPRandAdr);
 
   apScanHidden = (bool)EEPROM.read(apScanHiddenAdr);
@@ -90,8 +121,10 @@ void Settings::load() {
   isSettingsLoaded = 1;
 }
 
-void Settings::reset() {
-  if (debug) Serial.print("reset settings...");
+void Settings::reset()
+{
+  if (debug)
+    Serial.print("reset settings...");
 
   ssid = "pwned";
   password = "deauther"; //must have at least 8 characters
@@ -117,27 +150,32 @@ void Settings::reset() {
   beaconInterval = false;
   ledPin = 2;
 
-  if (debug) Serial.println("done");
+  if (debug)
+    Serial.println("done");
 
   save();
 }
 
-void Settings::save() {
+void Settings::save()
+{
   ssidLen = ssid.length();
   passwordLen = password.length();
 
   EEPROM.write(ssidLenAdr, ssidLen);
   EEPROM.write(passwordLenAdr, passwordLen);
-  for (int i = 0; i < ssidLen; i++) EEPROM.write(ssidAdr + i, ssid[i]);
-  for (int i = 0; i < passwordLen; i++) EEPROM.write(passwordAdr + i, password[i]);
+  for (int i = 0; i < ssidLen; i++)
+    EEPROM.write(ssidAdr + i, ssid[i]);
+  for (int i = 0; i < passwordLen; i++)
+    EEPROM.write(passwordAdr + i, password[i]);
 
   EEPROM.write(ssidHiddenAdr, ssidHidden);
   EEPROM.write(apChannelAdr, apChannel);
 
   EEPROM.write(isMacAPRandAdr, isMacAPRand);
 
-  for(int i=0; i<6; i++){
-    EEPROM.write(macAPAdr+i, macAP._get(i));
+  for (int i = 0; i < 6; i++)
+  {
+    EEPROM.write(macAPAdr + i, macAP._get(i));
   }
 
   EEPROM.write(apScanHiddenAdr, apScanHidden);
@@ -158,13 +196,15 @@ void Settings::save() {
   EEPROM.write(ledPinAdr, ledPin);
   EEPROM.commit();
 
-  if (debug) {
+  if (debug)
+  {
     info();
     Serial.println("settings saved");
   }
 }
 
-void Settings::info() {
+void Settings::info()
+{
   Serial.println("Settings:");
   Serial.println("SSID: " + ssid);
   Serial.println("SSID length: " + (String)ssidLen);
@@ -189,7 +229,8 @@ void Settings::info() {
   Serial.println("LED Pin: " + (String)ledPin);
 }
 
-size_t Settings::getSize() {
+size_t Settings::getSize()
+{
   String json = "{";
   size_t jsonSize = 0;
 
@@ -216,9 +257,10 @@ size_t Settings::getSize() {
   return jsonSize;
 }
 
-void Settings::send() {
-  if (debug) Serial.println("getting settings json");
-  sendHeader(200, "text/json", getSize());
+void Settings::send()
+{
+  if (debug)
+    Serial.print("getting settings json -> ");
 
   String json = "{";
   json += "\"ssid\":\"" + ssid + "\",";
@@ -239,9 +281,12 @@ void Settings::send() {
   json += "\"macInterval\":" + (String)macInterval + ",";
   json += "\"beaconInterval\":" + (String)beaconInterval + ",";
   json += "\"ledPin\":" + (String)ledPin + "}";
+
+  sendHeader(200, "text/json", json.length());
+
   sendToBuffer(json);
   sendBuffer();
 
-  if (debug) Serial.println("\ndone");
-
+  if (debug)
+    Serial.println("done");
 }
