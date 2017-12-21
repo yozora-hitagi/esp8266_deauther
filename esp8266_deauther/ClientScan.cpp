@@ -38,7 +38,7 @@ void ClientScan::start(int _time) {
   }
 
   wifi_promiscuous_enable(0);
-  WiFi.disconnect();
+  //WiFi.disconnect();//这个方法异常
   wifi_set_opmode(STATION_MODE);
   wifi_set_channel(channels[curChannel]);
   wifi_promiscuous_enable(1);
